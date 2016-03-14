@@ -8,8 +8,5 @@ out/
 *.ipr
 *.iws
 
-# examples
-examples/
-
 # prop
 gradle.properties
