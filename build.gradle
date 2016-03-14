@@ -1,6 +1,16 @@
 plugins {
     id 'groovy'
+    id 'maven-publish'
     id 'com.jfrog.bintray' version '1.6'
+}
+
+repositories {
+    jcenter()
+}
+
+if (ext.env == 'deploy') {
+    apply from: file('gradle/maven.gradle')
+    apply from: file('gradle/bintray.gradle')
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_7
@@ -11,3 +21,89 @@ dependencies {
     compile localGroovy()
     compile 'org.twitter4j:twitter4j-core:4.0.4'
 }
+
+
+ext.siteUrl = 'https://github.com/operando/gradle-twitter-plugin'
+
+group = 'com.os.operando.twitter'
+description = 'gradle twitter plugin.'
+version = '0.9'
+ext.license = 'Apache-2.0'
+ext.licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+ext.gradlePluginId = 'com.os.operando'
+ext.gitUrl = 'https://github.com/operando/gradle-twitter-plugin.git'
+
+task javadocJar(type: Jar, dependsOn: groovydoc) {
+    from "${buildDir}/docs/groovydoc"
+    classifier = 'javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId rootProject.group
+            artifactId rootProject.name
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = DELEGATE_FIRST
+                    name rootProject.name
+                    description rootProject.description
+                    url rootProject.siteUrl
+                    inceptionYear '2016'
+                    packaging 'jar'
+                    scm {
+                        url rootProject.gitUrl
+                        connection "scm:git:$rootProject.gitUrl"
+                    }
+                    licenses {
+                        license {
+                            name rootProject.license
+                            url rootProject.licenseUrl
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'operando'
+                            name 'Shinobu Okano'
+                            email 'okanoshinobu8@gmail.com'
+                            url 'https://github.com/operando'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = rootProject.hasProperty('bintrayUser') ? rootProject.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = rootProject.hasProperty('bintrayApiKey') ? rootProject.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    publications = ['maven']
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = rootProject.name
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        desc = rootProject.description
+        issueTrackerUrl = 'https://github.com/operando/gradle-twitter-plugin/issues'
+        licenses = ['Apache-2.0']
+        labels = ['gradle']
+        publicDownloadNumbers = true
+        version {
+            attributes = ['gradle-plugin': "${rootProject.gradlePluginId}:${rootProject.group}:${rootProject.name}"]
+            name = rootProject.version
+        }
+    }
+}
+
+task install(dependsOn: 'publishMavenPublicationToMavenLocal')
