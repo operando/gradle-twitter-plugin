@@ -1,24 +1,16 @@
-apply plugin: 'java'
-apply plugin: 'groovy'
 apply plugin: 'com.os.operando.gradle.twitter'
 
 buildscript {
     repositories {
-        mavenLocal()
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'com.os.operando.twitter:gradle-twitter-plugin:0.9'
     }
 }
 
-dependencies {
-    compile gradleApi()
-    compile localGroovy()
-}
-
 twitter {
-    dependsOnTasks "clean"
+    dependsOnTasks "tasks"
     message "＼(^o^)／"
     oauthConsumerKey project.oauthConsumerKey
     oauthConsumerSecret project.oauthConsumerSecret
