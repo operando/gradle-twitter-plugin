@@ -54,7 +54,7 @@ class TwitterPlugin implements Plugin<Project> {
             AccessToken token = new AccessToken(extension.oauthAccessToken, extension.oauthAccessTokenSecret)
             twitter.setOAuthAccessToken(token)
             Status status = twitter.updateStatus(extension.message)
-            System.out.println("Successfully updated the status to [" + status.getText() + "].");
+            println "Successfully updated the status to [" + status.getText() + "]."
         }
     }
 
