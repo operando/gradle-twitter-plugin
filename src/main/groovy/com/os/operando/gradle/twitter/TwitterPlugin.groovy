@@ -24,22 +24,24 @@ class TwitterPlugin implements Plugin<Project> {
 //            println project.hogehoge.message
 //        }
         project.afterEvaluate {
-            project.getGradle().getTaskGraph().addTaskExecutionListener(new TaskExecutionListener() {
-                @Override
-                void beforeExecute(Task task) {
-                    task.logging.addStandardOutputListener(new StandardOutputListener() {
-                        @Override
-                        void onOutput(CharSequence charSequence) {
-                            taskLogBuilder.append(charSequence)
-                        }
-                    })
-                }
+            if (extension.enabled) {
+                project.getGradle().getTaskGraph().addTaskExecutionListener(new TaskExecutionListener() {
+                    @Override
+                    void beforeExecute(Task task) {
+                        task.logging.addStandardOutputListener(new StandardOutputListener() {
+                            @Override
+                            void onOutput(CharSequence charSequence) {
+                                taskLogBuilder.append(charSequence)
+                            }
+                        })
+                    }
 
-                @Override
-                void afterExecute(Task task, TaskState state) {
-                    handleTaskFinished(task, state)
-                }
-            })
+                    @Override
+                    void afterExecute(Task task, TaskState state) {
+                        handleTaskFinished(task, state)
+                    }
+                })
+            }
         }
 //        project.tasks.create('hoge2', HogehogeTask)
     }

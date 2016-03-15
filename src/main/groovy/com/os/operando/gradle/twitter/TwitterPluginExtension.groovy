@@ -7,6 +7,7 @@ class TwitterPluginExtension {
     String oauthAccessToken
     String oauthAccessTokenSecret
     List<Object> dependsOnTasks
+    boolean enabled = true
 
     void dependsOnTasks(Object... paths) {
         this.dependsOnTasks = Arrays.asList(paths)
