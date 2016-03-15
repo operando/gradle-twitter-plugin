@@ -33,7 +33,6 @@ ext.licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
 ext.gradlePluginId = 'com.os.operando'
 ext.gitUrl = 'https://github.com/operando/gradle-twitter-plugin.git'
 
-    classifier = 'javadoc'
 bintray {
     user = rootProject.hasProperty('bintrayUser') ? rootProject.property('bintrayUser') : System.getenv('BINTRAY_USER')
     key = rootProject.hasProperty('bintrayApiKey') ? rootProject.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
