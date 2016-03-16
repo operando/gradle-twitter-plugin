@@ -27,7 +27,7 @@ ext.siteUrl = 'https://github.com/operando/gradle-twitter-plugin'
 
 group = 'com.os.operando.twitter'
 description = 'gradle twitter plugin.'
-version = '0.9'
+version = '0.9.2'
 ext.license = 'Apache-2.0'
 ext.licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
 ext.gradlePluginId = 'com.os.operando'
